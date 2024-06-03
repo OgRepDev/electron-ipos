@@ -44,7 +44,7 @@ const EditPackModal = ({ pack, onClose, onSave }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Numer paczki</label>
+            <label className="block text-sm font-medium text-gray-700">Odbiorca</label>
             <input
               type="text"
               name="receiver"
@@ -55,7 +55,7 @@ const EditPackModal = ({ pack, onClose, onSave }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Numer paczki</label>
+            <label className="block text-sm font-medium text-gray-700">Dostawca</label>
             <input
               type="text"
               name="supplier"
@@ -66,7 +66,7 @@ const EditPackModal = ({ pack, onClose, onSave }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Numer paczki</label>
+            <label className="block text-sm font-medium text-gray-700">Kod dostawcy</label>
             <input
               type="text"
               name="supplierCode"
@@ -77,11 +77,11 @@ const EditPackModal = ({ pack, onClose, onSave }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Numer paczki</label>
+            <label className="block text-sm font-medium text-gray-700">Uwagi</label>
             <input
               type="text"
-              name="position"
-              value={editedPack.position}
+              name="comments"
+              value={editedPack.comments}
               onChange={handleInputChange}
               className="mt-1 block w-full rounded-md bg-gray-100 shadow-inner focus:border-indigo-500 sm:text-sm focus:outline-none p-2"
               required

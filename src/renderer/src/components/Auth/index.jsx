@@ -90,7 +90,6 @@ export const Login = () => {
             <div className="w-1/3 bg-gray-100 h-0.5 rounded-full" />
             <p className="flex justify-center items-center opacity-50 text-sm">Muffin. 2024</p>
             <div className="w-1/3 bg-gray-100 h-0.5 rounded-full" />
-            <p id="message">Version</p>
           </div>
         </div>
       </div>

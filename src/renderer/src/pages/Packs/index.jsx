@@ -11,12 +11,15 @@ const Packs = () => {
   const [showEditModal, setShowEditModal] = useState(false)
   const [shouldRefreshTable, setShouldRefreshTable] = useState(false)
   const [searchQuery, setSearchQuery] = useState('') // New state for search query
+  const [searchCategory, setSearchCategory] = useState('number') // New state for search category
   const [newPack, setNewPack] = useState({
     number: '',
     receiver: '',
     supplier: '',
     supplierCode: '',
-    position: ''
+    comments: '',
+    sender: '',
+    addedDate: ''
   })
   const [editPack, setEditPack] = useState(null)
 
@@ -38,13 +41,38 @@ const Packs = () => {
     setSearchQuery(event.target.value)
   }
 
+  const handleCategoryChange = (event) => {
+    setSearchCategory(event.target.value)
+  }
+
+  const formatDate = (date) => {
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    }
+    const formatter = new Intl.DateTimeFormat('pl-PL', options)
+    const formattedParts = formatter.formatToParts(date)
+
+    const formattedDate = `${formattedParts[4].value}-${formattedParts[2].value}-${formattedParts[0].value} ${formattedParts[6].value}:${formattedParts[8].value}`
+    return formattedDate
+  }
+
   const handleAddPack = async (e) => {
     e.preventDefault()
     try {
       const auth = getAuth()
       const user = auth.currentUser
+      const currentDate = formatDate(new Date())
       if (user) {
-        const packWithEmail = { ...newPack, email: user.email, status: 'Oczekująca' }
+        const packWithEmail = {
+          ...newPack,
+          email: user.email,
+          status: 'Oczekująca',
+          addedDate: currentDate
+        }
         await addDoc(collection(db, 'packs'), packWithEmail)
         setShowModal(false)
         setNewPack({
@@ -52,7 +80,8 @@ const Packs = () => {
           supplier: '',
           receiver: '',
           supplierCode: '',
-          position: ''
+          comments: '',
+          sender: ''
         })
         setShouldRefreshTable(true)
       } else {
@@ -83,16 +112,27 @@ const Packs = () => {
   return (
     <div className="h-full w-full flex flex-col p-4">
       <div className="flex w-full items-center justify-between box-border">
-        <div className="rounded-md flex items-center gap-2 bg-gray-100 shadow-sm px-4 py-2 text-sm text-[#7a7a7a] w-[20rem]">
-          <FaSearch />
-          <div className="h-full w-0.5 bg-[#bcbcbc]" />
-          <input
-            className="bg-transparent focus:outline-none w-full"
-            type="text"
-            placeholder="Wyszukaj po numerze paczki.."
-            value={searchQuery}
-            onChange={handleSearchChange} // Update search query
-          />
+        <div className="flex items-center gap-2">
+          <select
+            className="rounded-md bg-gray-100 shadow-sm px-4 py-2 text-sm text-[#7a7a7a]"
+            value={searchCategory}
+            onChange={handleCategoryChange}
+          >
+            <option value="number">Numer</option>
+            <option value="receiver">Odbiorca</option>
+            <option value="supplier">Dostawca</option>
+          </select>
+          <div className="rounded-md flex items-center gap-2 bg-gray-100 shadow-sm px-4 py-2 text-sm text-[#7a7a7a] w-[20rem]">
+            <FaSearch />
+            <div className="h-full w-0.5 bg-[#bcbcbc]" />
+            <input
+              className="bg-transparent focus:outline-none w-full"
+              type="text"
+              placeholder="Wyszukaj..."
+              value={searchQuery}
+              onChange={handleSearchChange} // Update search query
+            />
+          </div>
         </div>
         <button
           className="bg-[#4a7ba8] px-5 py-2 flex gap-2 rounded-md text-white justify-center items-center text-sm"
@@ -107,6 +147,7 @@ const Packs = () => {
           shouldRefresh={shouldRefreshTable}
           setShouldRefresh={setShouldRefreshTable}
           searchQuery={searchQuery} // Pass search query to PacksTable
+          searchCategory={searchCategory} // Pass search category to PacksTable
           onEditPack={handleEditPack}
         />
       </div>
@@ -140,7 +181,9 @@ const Packs = () => {
               </div>
               <div className="flex gap-2 w-full">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Kod dostawcy</label>
+                  <label className="block text-sm font-medium text-gray-700 w-[60%]">
+                    Kod dostawcy
+                  </label>
                   <input
                     type="text"
                     name="supplierCode"
@@ -151,23 +194,40 @@ const Packs = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Dostawca</label>
-                  <input
-                    type="text"
+                  <label className="block text-sm font-medium text-gray-700 w-[40%]">
+                    Dostawca
+                  </label>
+                  <select
                     name="supplier"
                     value={newPack.supplier}
                     onChange={handleInputChange}
                     className="mt-1 block w-full rounded-md bg-gray-100 shadow-inner focus:border-indigo-500 sm:text-sm focus:outline-none p-2"
                     required
-                  />
+                  >
+                    <option value="">Wybierz dostawcę</option>
+                    <option value="DHL">DHL</option>
+                    <option value="DPD">DPD</option>
+                    <option value="UPS">UPS</option>
+                  </select>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Miejsce</label>
+                <label className="block text-sm font-medium text-gray-700">Nadawca</label>
                 <input
                   type="text"
-                  name="position"
-                  value={newPack.position}
+                  name="sender"
+                  value={newPack.sender}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md bg-gray-100 shadow-inner focus:border-indigo-500 sm:text-sm focus:outline-none p-2"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Uwagi</label>
+                <input
+                  type="text"
+                  name="comments"
+                  value={newPack.comments}
                   onChange={handleInputChange}
                   className="mt-1 block w-full rounded-md bg-gray-100 shadow-inner focus:border-indigo-500 sm:text-sm focus:outline-none p-2"
                   required

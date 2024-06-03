@@ -75,6 +75,21 @@ const PacksTable = ({ shouldRefresh, setShouldRefresh, onEditPack, searchQuery }
     }
   }
 
+  const formatDate = (date) => {
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    }
+    const formatter = new Intl.DateTimeFormat('pl-PL', options)
+    const formattedParts = formatter.formatToParts(date)
+
+    const formattedDate = `${formattedParts[4].value}-${formattedParts[2].value}-${formattedParts[0].value} ${formattedParts[6].value}:${formattedParts[8].value}`
+    return formattedDate
+  }
+
   const handleSendPack = async () => {
     try {
       if (!selectedPack) return
@@ -84,7 +99,8 @@ const PacksTable = ({ shouldRefresh, setShouldRefresh, onEditPack, searchQuery }
         status: 'Wydana',
         releasedTo: receiver,
         releaseCode: releaseCode,
-        releasedBy: currentUser.email
+        releasedBy: currentUser.email,
+        releasedDate: formatDate(new Date())
       }
 
       // Add the pack to the 'archive' collection
@@ -117,8 +133,11 @@ const PacksTable = ({ shouldRefresh, setShouldRefresh, onEditPack, searchQuery }
     setShowSendModal(false)
   }
 
-  const filteredPacks = packs.filter((pack) =>
-    pack.number.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPacks = packs.filter(
+    (pack) =>
+      pack.number.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pack.receiver.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pack.supplier.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
@@ -139,7 +158,7 @@ const PacksTable = ({ shouldRefresh, setShouldRefresh, onEditPack, searchQuery }
               Status
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Miejsce
+              Nadawca
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Akcje
@@ -179,10 +198,8 @@ const PacksTable = ({ shouldRefresh, setShouldRefresh, onEditPack, searchQuery }
                     {pack.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {pack.position}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{pack.sender}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-md text-gray-900">
                   <button
                     className="text-orange-600 hover:text-orange-900"
                     onClick={() => handleEditPack(pack)}

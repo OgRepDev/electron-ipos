@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { db } from '../../../firebase/firebase.config'
 
 import noDataImg from '../assets/nodata.svg'
+import ArchivePackViewModal from './ArchivePackViewModal'
 
 const ArchiveTable = () => {
   const [packs, setPacks] = useState([])
   const [loading, setLoading] = useState(true)
+  const [selectedPack, setSelectedPack] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +40,16 @@ const ArchiveTable = () => {
     }
   }
 
+  const handleViewClick = (pack) => {
+    setSelectedPack(pack)
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedPack(null)
+  }
+
   return (
     <div className="overflow-x-auto my-5">
       <table className="min-w-full divide-y divide-gray-200 h-auto">
@@ -55,9 +68,6 @@ const ArchiveTable = () => {
               Status
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Miejsce
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Akcje
             </th>
           </tr>
@@ -65,13 +75,13 @@ const ArchiveTable = () => {
         <tbody className="bg-white divide-y divide-gray-200 h-full overflow-y-auto w-full">
           {loading ? (
             <tr>
-              <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
+              <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
                 Loading...
               </td>
             </tr>
           ) : packs.length === 0 ? (
             <tr>
-              <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
+              <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
                 <div className="flex flex-col justify-center items-center">
                   <img src={noDataImg} alt="No Data" width={150} />
                   <p className="text-lg opacity-70">Brak paczek</p>
@@ -96,14 +106,21 @@ const ArchiveTable = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {pack.position}
+                  <button
+                    onClick={() => handleViewClick(pack)}
+                    className="px-4 py-2 bg-blue-600 text-white rounded"
+                  >
+                    Podgląd
+                  </button>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
               </tr>
             ))
           )}
         </tbody>
       </table>
+      {selectedPack && (
+        <ArchivePackViewModal isOpen={isModalOpen} onClose={closeModal} pack={selectedPack} />
+      )}
     </div>
   )
 }

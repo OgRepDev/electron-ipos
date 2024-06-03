@@ -1,35 +1,46 @@
-import Versions from './components/Versions'
-import electronLogo from './assets/electron.svg'
+import React from 'react'
+import { Route, MemoryRouter as Router, Routes } from 'react-router-dom'
+import { Login } from './components/Auth'
+import Layout from './components/Layout'
+import { AuthProvider } from './contexts/authContext'
+import Administrator from './pages/Administrator'
+import Archive from './pages/Archive'
+import Packs from './pages/Packs'
 
 function App() {
-  const ipcHandle = () => window.electron.ipcRenderer.send('ping')
-
   return (
-    <>
-      <img alt="logo" className="logo" src={electronLogo} />
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-            Send IPC
-          </a>
-        </div>
-      </div>
-      <Versions></Versions>
-    </>
+    <Router>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route
+            path="/home"
+            element={
+              <Layout>
+                <Packs />
+              </Layout>
+            }
+          />
+          <Route
+            path="/archive"
+            element={
+              <Layout>
+                <Archive />
+              </Layout>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <Layout>
+                <Administrator />
+              </Layout>
+            }
+          />
+        </Routes>
+      </AuthProvider>
+    </Router>
   )
 }
 
 export default App
-

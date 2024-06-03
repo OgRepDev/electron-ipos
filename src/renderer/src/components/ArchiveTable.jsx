@@ -72,7 +72,7 @@ const ArchiveTable = () => {
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200 h-full overflow-y-auto w-full">
+        <tbody className="bg-white divide-y divide-gray-200 h-[90vh] overflow-y-auto w-full">
           {loading ? (
             <tr>
               <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">

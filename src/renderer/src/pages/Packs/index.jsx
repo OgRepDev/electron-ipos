@@ -5,6 +5,7 @@ import { FaPlus, FaSearch } from 'react-icons/fa'
 import { db } from '../../../../firebase/firebase.config'
 import EditPackModal from '../../components/EditPackModal'
 import PacksTable from '../../components/PacksTable'
+import { exportExcel } from '../../utils/exportExcelUtil'
 
 const Packs = () => {
   const [showModal, setShowModal] = useState(false)
@@ -35,6 +36,11 @@ const Packs = () => {
       ...prev,
       [name]: value
     }))
+  }
+
+  const handleExportExcel = () => {
+    // Wyeksportuj dane z tabeli do formatu Excel
+    exportExcel(filteredPacks)
   }
 
   const handleSearchChange = (event) => {

@@ -1,10 +1,11 @@
 import { getAuth } from 'firebase/auth'
 import { collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
-import { FaEdit, FaTrash } from 'react-icons/fa'
+import { FaEdit, FaFileExcel, FaTrash } from 'react-icons/fa'
 import { IoMdSend } from 'react-icons/io'
 import { db } from '../../../firebase/firebase.config'
 import noDataImg from '../assets/nodata.svg'
+import { exportExcel } from '../utils/exportExcelUtil'
 
 const PacksTable = ({ shouldRefresh, setShouldRefresh, onEditPack, searchQuery }) => {
   const [packs, setPacks] = useState([])
@@ -32,6 +33,10 @@ const PacksTable = ({ shouldRefresh, setShouldRefresh, onEditPack, searchQuery }
 
     fetchData()
   }, [shouldRefresh])
+
+  const handleExportExcel = () => {
+    exportExcel(packs)
+  }
 
   const handleDeletePack = async (packId) => {
     try {
@@ -142,6 +147,12 @@ const PacksTable = ({ shouldRefresh, setShouldRefresh, onEditPack, searchQuery }
 
   return (
     <div className="overflow-x-auto py-5 h-[90vh] overflow-y-auto">
+      <button
+        className="bg-green-700 flex items-center gap-2 text-white px-3 py-1 mb-4 rounded-md"
+        onClick={handleExportExcel}
+      >
+        <FaFileExcel /> Excel
+      </button>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>

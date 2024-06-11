@@ -6,6 +6,7 @@ const EditPackModal = ({ pack, onClose, onSave }) => {
       ? pack
       : {
           number: '',
+          uniqueNumber: '',
           receiver: '',
           supplier: '',
           status: '',
@@ -38,6 +39,17 @@ const EditPackModal = ({ pack, onClose, onSave }) => {
               type="text"
               name="number"
               value={editedPack.number}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md bg-gray-100 shadow-inner focus:border-indigo-500 sm:text-sm focus:outline-none p-2"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Unikalny numer paczki</label>
+            <input
+              type="text"
+              name="uniqueNumber"
+              value={editedPack.uniqueNumber}
               onChange={handleInputChange}
               className="mt-1 block w-full rounded-md bg-gray-100 shadow-inner focus:border-indigo-500 sm:text-sm focus:outline-none p-2"
               required

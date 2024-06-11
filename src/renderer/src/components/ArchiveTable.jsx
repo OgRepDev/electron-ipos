@@ -56,7 +56,7 @@ const ArchiveTable = () => {
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Numer paczki
+              Unikalny numer
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Odbiorca
@@ -91,7 +91,9 @@ const ArchiveTable = () => {
           ) : (
             packs.map((pack) => (
               <tr key={pack.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{pack.number}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {pack.uniqueNumber}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {pack.receiver}
                 </td>

@@ -15,6 +15,7 @@ const Packs = () => {
   const [searchCategory, setSearchCategory] = useState('number') // New state for search category
   const [newPack, setNewPack] = useState({
     number: '',
+    uniqueNumber: '',
     receiver: '',
     supplier: '',
     supplierCode: '',
@@ -83,6 +84,7 @@ const Packs = () => {
         setShowModal(false)
         setNewPack({
           number: '',
+          uniqueNumber: '',
           supplier: '',
           receiver: '',
           supplierCode: '',
@@ -175,6 +177,19 @@ const Packs = () => {
                 />
               </div>
               <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Unikalny numer paczki
+                </label>
+                <input
+                  type="text"
+                  name="uniqueNumber"
+                  value={newPack.uniqueNumber}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md bg-gray-100 shadow-inner focus:border-indigo-500 sm:text-sm focus:outline-none p-2"
+                  required
+                />
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700">Odbiorca</label>
                 <input
                   type="text"
@@ -214,6 +229,10 @@ const Packs = () => {
                     <option value="DHL">DHL</option>
                     <option value="DPD">DPD</option>
                     <option value="UPS">UPS</option>
+                    <option value="Poczta Polska">Poczta Polska</option>
+                    <option value="Inpost">Inpost</option>
+                    <option value="GLS">GLS</option>
+                    <option value="FedEx">FedEx</option>
                   </select>
                 </div>
               </div>

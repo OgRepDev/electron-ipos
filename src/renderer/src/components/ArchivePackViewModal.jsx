@@ -10,6 +10,9 @@ const ArchivePackViewModal = ({ isOpen, onClose, pack }) => {
           <p className="flex gap-2 items-center">
             Numer paczki: <span className="font-semibold">{pack.number}</span>
           </p>
+          <p className="flex gap-2 items-center">
+            Unikalny numer paczki: <span className="font-semibold">{pack.uniqueNumber}</span>
+          </p>
           <div className="flex items-center gap-6 w-full">
             <p>
               Odebrał/a:{' '}
